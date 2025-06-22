@@ -23,6 +23,10 @@ import Coupons from "./pages/Coupons";
 import Staff from "./pages/Staff";
 import AddStaff from "./pages/AddStaff";
 import FlashSales from "./pages/FlashSales";
+import Payments from "./pages/Payments";
+import PaymentDetails from "./pages/PaymentDetails";
+import TransactionDetail from "./pages/TransactionDetail";
+import InvoiceDetail from "./pages/InvoiceDetail";
 
 
 function App() {
@@ -55,6 +59,10 @@ function App() {
             <Route path="staff" element={<Staff />} />
             <Route path="add-staff" element={<AddStaff />} />
             <Route path="flash-sales" element={<FlashSales />} />
+            <Route path="payments" element={<Payments />} />
+            <Route path="payment-details/:id" element={<PaymentDetails />} />
+            <Route path="transaction-details/:id" element={<TransactionDetail />} />
+            <Route path="invoice-details/:id" element={<InvoiceDetail />} />
           </Route>
           <Route path="/signup" element={<Signup />} />
         </Routes>

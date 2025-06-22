@@ -23,7 +23,7 @@ const Transaction = () => {
   // Mock data - In a real application, this would come from an API
   const allOrders = [
     {
-      id: "021231",
+      id: "1020",
       productName: "Kanky Kitadakate (Green)",
       customer: "Leslie Alexander",
       price: 21.78,
@@ -34,7 +34,7 @@ const Transaction = () => {
         "https://media.istockphoto.com/id/1830111752/photo/black-t-shirt-short-sleeve-mockup.jpg?s=1024x1024&w=is&k=20&c=XsmPOD73lHWEsXDf-blvm5oHiPzuen-SJRsLw4hsHi8=",
     },
     {
-      id: "021232",
+      id: "1021",
       productName: "Kanky Kitadakate (Green)",
       customer: "John Doe",
       price: 21.78,
@@ -45,7 +45,7 @@ const Transaction = () => {
         "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     },
     {
-      id: "021233",
+      id: "1022",
       productName: "Beige Coffe (Navy)",
       customer: "Jane Smith",
       price: 25.99,
@@ -57,7 +57,7 @@ const Transaction = () => {
     },
     // Add more mock data as needed to test pagination and filtering
     ...Array.from({ length: 30 }, (_, i) => ({
-      id: `02123${i + 4}`,
+      id: `1023${i + 4}`,
       productName: `Product ${i + 1}`,
       customer: `Customer ${i + 1}`,
       price: parseFloat((20 + Math.random() * 30).toFixed(2)), // Ensure price is a number

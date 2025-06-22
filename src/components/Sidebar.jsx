@@ -11,7 +11,7 @@ import {
   FiSun,
   FiPackage,
 } from "react-icons/fi";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaPaypal } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaMountain } from "react-icons/fa";
@@ -217,6 +217,14 @@ const Sidebar = ({ closeSidebar }) => {
             onClick={() => handleNavigation("/dashboard/invoices", "invoices")}
           />
           <NavItem
+            icon={<FaPaypal />}
+            active={
+              location.pathname === "/dashboard/payments" ? activeItem : ""
+            }
+            text="Payments"
+            onClick={() => handleNavigation("/dashboard/payments", "payments")}
+          />
+          <NavItem
             icon={<MdOutlineImportContacts />}
             active={
               location.pathname === "/dashboard/inventory-management"
@@ -245,9 +253,13 @@ const Sidebar = ({ closeSidebar }) => {
           />
           <NavItem
             icon={<IoIosFlash />}
-            active={location.pathname === "/dashboard/flash-sales" ? activeItem : ""}
+            active={
+              location.pathname === "/dashboard/flash-sales" ? activeItem : ""
+            }
             text="Flash Sales"
-            onClick={() => handleNavigation("/dashboard/flash-sales", "flash sales")}
+            onClick={() =>
+              handleNavigation("/dashboard/flash-sales", "flash sales")
+            }
           />
           <NavItem
             icon={<FiShoppingCart />}

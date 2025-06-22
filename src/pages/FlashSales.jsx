@@ -123,28 +123,32 @@ const FlashSales = () => {
             name: "Premium Running Shoes",
             price: 129.99,
             stock: 150,
-            image: "https://example.com/shoes.jpg",
+            image:
+              "https://images.unsplash.com/photo-1738951878919-a4484dc75adc?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           },
           {
             id: "prod-2",
             name: "Wireless Headphones",
             price: 89.99,
             stock: 200,
-            image: "https://example.com/headphones.jpg",
+            image:
+              "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           },
           {
             id: "prod-3",
             name: "Smart Watch",
             price: 199.99,
             stock: 75,
-            image: "https://example.com/watch.jpg",
+            image:
+              "https://images.unsplash.com/photo-1551816230-ef5deaed4a26?q=80&w=465&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           },
           {
             id: "prod-4",
             name: "Fitness Tracker",
             price: 59.99,
             stock: 120,
-            image: "https://example.com/tracker.jpg",
+            image:
+              "https://plus.unsplash.com/premium_photo-1681433383783-661b519b154a?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           },
         ];
 

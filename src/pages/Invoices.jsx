@@ -596,15 +596,14 @@ const Invoices = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-3">
                           {/* We don't need a separate export button here if PDFDownloadLink is used for direct download */}
-                          <button
-                            onClick={() =>
-                              console.log("View/Print Invoice:", invoice.id)
-                            }
-                            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                            title="View/Print"
-                          >
-                            <FiEye className="h-5 w-5" />
-                          </button>
+                          <Link to={`/dashboard/invoice-details/${invoice.id}`}>
+                            <button
+                              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                              title="View/Print"
+                            >
+                              <FiEye className="h-5 w-5" />
+                            </button>
+                          </Link>
                           <button
                             onClick={() =>
                               navigate(`/invoices/edit/${invoice.id}`)
