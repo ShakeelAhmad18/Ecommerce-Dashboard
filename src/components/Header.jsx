@@ -138,29 +138,21 @@ const Header = ({ toggleSidebar }) => {
                   aria-labelledby="user-menu-button"
                   tabIndex="-1"
                 >
-                  <a
-                    href="#"
+                  <Link
+                    to="/dashboard/settings?activeTab=Account"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md mx-1"
                     role="menuitem"
                     tabIndex="-1"
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent default link behavior for demonstration
-                      console.log("Profile clicked");
-                      setIsProfileDropdownOpen(false); // Close dropdown on click
-                    }}
+                    onClick={() => setIsProfileDropdownOpen(false)}
                   >
                     Profile
-                  </a>
+                  </Link>
                   <Link
                     to="/signup"
                     className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md mx-1"
                     role="menuitem"
                     tabIndex="-1"
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent default link behavior for demonstration
-                      console.log("Sign Out clicked");
-                      setIsProfileDropdownOpen(false); // Close dropdown on click
-                    }}
+                    onClick={() => setIsProfileDropdownOpen(false)}
                   >
                     Sign Out
                   </Link>

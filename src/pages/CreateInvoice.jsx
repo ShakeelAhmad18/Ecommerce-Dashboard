@@ -12,8 +12,8 @@ import {
 } from "react-icons/fi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import html2canvas from "html2canvas-pro"; // CHANGED: Import html2canvas-pro
-import jsPDF from "jspdf";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
 import InvoiceTemplate from "../components/InvoiceTemplate"; // Path to your new template
 
 const CreateInvoice = () => {
@@ -175,63 +175,39 @@ const CreateInvoice = () => {
     }
   };
 
-  const downloadPdf = async () => {
-    if (!invoiceTemplateRef.current) {
-      console.error("Invoice template ref is null. Cannot generate PDF.");
-      return;
-    }
-
-    try {
-      // Temporarily make the hidden element visible for capture if needed,
-      // though html2canvas-pro can often capture hidden elements.
-      // If issues persist, you might need to temporarily style it.
-      // For instance, by adding a class with `display: block !important; position: absolute; left: 0; top: 0; z-index: -1;`
-
-      const input = invoiceTemplateRef.current;
-      const canvas = await html2canvas(input, {
-        scale: 2, // Higher scale for better quality PDF (e.g., 2 or 3)
-        useCORS: true, // Important if you have images from different origins
-        // You might need to specify a background color if your template has transparent parts
-        // backgroundColor: '#ffffff',
-        // Optional: windowWidth and windowHeight can help if the content size is dynamic
-        windowWidth: input.scrollWidth,
-        windowHeight: input.scrollHeight,
-      });
-
-      const imgData = canvas.toDataURL("image/jpeg", 1.0); // Use JPEG for smaller file size, 1.0 for max quality
-      const pdf = new jsPDF("p", "mm", "a4"); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size
-
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-
-      let position = 0; // Top position of the image on the current page
-
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight); // Use JPEG here
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight); // Use JPEG here
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save(`invoice_${invoice.invoiceNumber}.pdf`);
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      alert("Failed to generate PDF. Please check console for details.");
-    }
-  };
 
   const printInvoice = () => {
-    // This will open the browser's print dialog.
-    // For a specific print layout, you'd typically use a print-specific CSS stylesheet.
-    // e.g., @media print { .no-print { display: none; } }
-    window.print();
+    // Open in new window for printing
+    const printWindow = window.open("", "_blank");
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print Invoice</title>
+          <style>
+            body { margin: 0; padding: 0; }
+            iframe { width: 100%; height: 100%; border: none; }
+          </style>
+        </head>
+        <body>
+          <iframe src="${URL.createObjectURL(
+            new Blob([<InvoiceTemplate invoice={invoice} />], {
+              type: "application/pdf",
+            })
+          )}"></iframe>
+          <script>
+            window.onload = function() {
+              setTimeout(function() {
+                window.print();
+                window.close();
+              }, 1000);
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
   };
-
+  
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
@@ -727,48 +703,35 @@ const CreateInvoice = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-            <button
-              type="button"
-              onClick={downloadPdf}
-              className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FiDownload className="mr-2" />
-              Download PDF
-            </button>
-            <button
-              type="button"
-              onClick={printInvoice}
-              className="flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <FiPrinter className="mr-2" />
-              Print Invoice
-            </button>
-            <button
-              type="submit"
-              className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Save Invoice
-            </button>
-          </div>
         </form>
-
-        {/* Hidden Invoice Template for PDF Generation */}
-        {/*
-          IMPORTANT: Use `display: 'none'` or `visibility: 'hidden'`
-          DO NOT use `hidden` attribute or `display: none` Tailwind class directly on the component
-          as `html2canvas` might not capture elements that are completely hidden from the layout tree.
-          `position: absolute; left: -9999px; top: -9999px;` is a common reliable method.
-        */}
-        <div
-          style={{
-            position: "absolute",
-            left: "-9999px",
-            top: "-9999px",
-            zIndex: -1,
-          }}
-        >
-          <InvoiceTemplate ref={invoiceTemplateRef} invoice={invoice} />
+        <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+          <PDFDownloadLink
+            document={<InvoiceTemplate invoice={invoice} />}
+            fileName={`invoice_${invoice.invoiceNumber}.pdf`}
+          >
+            {({ loading }) => (
+              <button
+                className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={loading}
+              >
+                <FiDownload className="mr-2" />
+                {loading ? "Preparing..." : "Download Invoice"}
+              </button>
+            )}
+          </PDFDownloadLink>
+          <button
+            onClick={printInvoice}
+            className="flex items-center justify-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-base font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <FiPrinter className="mr-2" />
+            Print Invoice
+          </button>
+          <button
+            type="submit"
+            className="flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Save Invoice
+          </button>
         </div>
       </div>
     </div>

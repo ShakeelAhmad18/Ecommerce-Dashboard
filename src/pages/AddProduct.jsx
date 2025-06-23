@@ -82,7 +82,7 @@ const AddProduct = () => {
     <div className="container mx-auto px-4 py-8 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
       {/* Breadcrumb */}
       <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-        <span className="font-medium">Datthoard</span> ▶{" "}
+        <span className="font-medium">Dashboard</span> ▶{" "}
         <span className="font-medium">Product</span> ▶ <span>Add Product</span>
       </div>
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Router, Routes,  } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Router, Routes, useLocation,  } from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import Signup from "./pages/Signup";
 import Sneakers from "./pages/Sneakers";
@@ -31,10 +31,14 @@ import InvoiceDetail from "./pages/InvoiceDetail";
 
 function App() {
  
+     const location=useLocation();
 
+     if(location.pathname === "/") {
+        return <Navigate to="/dashboard" replace />;
+     }
+    
   return (
-    <div>
-      <BrowserRouter>
+    <>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="products/sneakers" element={<Sneakers />} />
@@ -66,8 +70,7 @@ function App() {
           </Route>
           <Route path="/signup" element={<Signup />} />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </>
   );
 }
 

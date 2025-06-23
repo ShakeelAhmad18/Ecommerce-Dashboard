@@ -1,20 +1,264 @@
 import React from "react";
+import {
+  Document,
+  Page,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Font,
+} from "@react-pdf/renderer";
+
+// Register fonts (you'll need to provide these font files)
+Font.register({
+  family: "Inter",
+  fonts: [
+    { src: "/fonts/Inter-Regular.otf" },
+    { src: "/fonts/Inter-Bold.otf", fontWeight: "bold" },
+    { src: "/fonts/Inter-SemiBold.otf", fontWeight: "semibold" },
+    { src: "/fonts/Inter-Light.otf", fontWeight: "light" },
+  ],
+});
+
+// Create styles
+const styles = StyleSheet.create({
+  page: {
+    padding: 48,
+    fontSize: 10,
+    fontFamily: "Inter",
+    color: "#1A1A1A",
+    backgroundColor: "#FFFFFF",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 32,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EAECF0",
+    borderBottomStyle: "solid",
+  },
+  logoContainer: {
+    width: 160,
+  },
+  logo: {
+    width: "100%",
+    height: 48,
+    objectFit: "contain",
+  },
+  invoiceTitle: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#101828",
+    letterSpacing: -0.5,
+  },
+  invoiceDetails: {
+    textAlign: "right",
+    lineHeight: 1.6,
+  },
+  invoiceNumber: {
+    fontSize: 14,
+    fontWeight: "semibold",
+    marginBottom: 4,
+    color: "#101828",
+  },
+  statusBadge: {
+    paddingVertical: 1,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    fontWeight: "semibold",
+    color: "#fff",
+    marginTop: 4,
+    fontSize: 10,
+    alignSelf: "flex-end",
+  },
+  section: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: "semibold",
+    marginBottom: 8,
+    color: "#344054",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  addressBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 32,
+    gap: 10,
+  },
+  addressCard: {
+    width: "48%",
+    backgroundColor: "#F9FAFB",
+    borderRadius: 8,
+    padding: 8,
+    borderWidth: 1,
+    borderColor: "#EAECF0",
+  },
+  addressText: {
+    lineHeight: 1.6,
+    color: "#475467",
+  },
+  table: {
+    width: "100%",
+    marginBottom: 24,
+  },
+  tableHeader: {
+    backgroundColor: "#F9FAFB",
+    borderBottomWidth: 1,
+    borderBottomColor: "#EAECF0",
+    borderBottomStyle: "solid",
+    flexDirection: "row",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginBottom: 4,
+  },
+  tableRow: {
+    flexDirection: "row",
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EAECF0",
+    borderBottomStyle: "solid",
+  },
+  colDescription: {
+    width: "40%",
+    paddingRight: 8,
+  },
+  colQuantity: {
+    width: "12%",
+    textAlign: "right",
+  },
+  colPrice: {
+    width: "18%",
+    textAlign: "right",
+  },
+  colTax: {
+    width: "15%",
+    textAlign: "right",
+  },
+  colAmount: {
+    width: "15%",
+    textAlign: "right",
+  },
+  itemDescription: {
+    fontWeight: "semibold",
+    color: "#101828",
+  },
+  itemDetails: {
+    color: "#667085",
+    marginTop: 4,
+    fontSize: 9,
+  },
+  totalsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: 32,
+  },
+  totalsBox: {
+    width: "40%",
+    borderWidth: 1,
+    borderColor: "#EAECF0",
+    borderStyle: "solid",
+    borderRadius: 8,
+    backgroundColor: "#F9FAFB",
+  },
+  totalsHeader: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EAECF0",
+    borderBottomStyle: "solid",
+  },
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 12,
+    alignItems: "center",
+  },
+  grandTotal: {
+    borderTopWidth: 1,
+    borderTopColor: "#D0D5DD",
+    borderTopStyle: "solid",
+    paddingTop: 6,
+    marginTop: 0,
+    backgroundColor: "#F2F4F7",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+  },
+  notesContainer: {
+    flexDirection: "row",
+    gap: 24,
+    marginTop: 24,
+  },
+  notesBox: {
+    flex: 1,
+    backgroundColor: "#F9FAFB",
+    padding: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#EAECF0",
+  },
+  footer: {
+    position: "absolute",
+    bottom: 32,
+    left: 48,
+    right: 48,
+    textAlign: "center",
+    color: "#667085",
+    fontSize: 9,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#EAECF0",
+  },
+  watermark: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%) rotate(-30deg)",
+    fontSize: 72,
+    color: "#EAECF0",
+    fontWeight: "bold",
+    opacity: 0.2,
+    letterSpacing: 4,
+  },
+  paymentCard: {
+    backgroundColor: "#F9FAFB",
+    borderRadius: 8,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#EAECF0",
+    marginBottom: 24,
+  },
+  currencySymbol: {
+    fontFeatureSettings: "'tnum' on, 'lnum' on",
+  },
+  amount: {
+    fontFeatureSettings: "'tnum' on, 'lnum' on",
+    fontWeight: "semibold",
+  },
+});
 
 const InvoiceTemplate = React.forwardRef(({ invoice }, ref) => {
-  // Calculation functions
+  // Calculations
   const calculateItemTotal = (item) => {
     return item.quantity * item.price * (1 + item.tax / 100);
   };
 
   const calculateSubtotal = () => {
-    return invoice.items.reduce((sum, item) => {
-      return sum + item.quantity * item.price;
-    }, 0);
+    return invoice.items.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      0
+    );
   };
 
   const calculateTax = () => {
-    const subtotal = calculateSubtotal();
-    return (subtotal * invoice.taxRate) / 100;
+    return invoice.items.reduce(
+      (sum, item) => sum + (item.quantity * item.price * item.tax) / 100,
+      0
+    );
   };
 
   const calculateDiscount = () => {
@@ -23,10 +267,7 @@ const InvoiceTemplate = React.forwardRef(({ invoice }, ref) => {
   };
 
   const calculateTotal = () => {
-    const subtotal = calculateSubtotal();
-    const tax = calculateTax();
-    const discount = calculateDiscount();
-    return subtotal + tax - discount;
+    return calculateSubtotal() + calculateTax() - calculateDiscount();
   };
 
   const formatDate = (dateString) => {
@@ -34,287 +275,257 @@ const InvoiceTemplate = React.forwardRef(({ invoice }, ref) => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case "paid":
+        return "#12B76A";
+      case "pending":
+        return "#F79009";
+      case "overdue":
+        return "#F04438";
+      case "draft":
+        return "#667085";
+      default:
+        return "#667085";
+    }
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat(invoice.locale || "en-US", {
+      style: "currency",
+      currency: invoice.currency || "USD",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+      .format(amount)
+      .replace(/^(\D+)/, "$1 ");
+  };
+
   return (
-    <div
-      ref={ref}
-      className="bg-white p-10 max-w-4xl mx-auto font-sans text-gray-800"
-      style={{
-        width: "210mm",
-        minHeight: "297mm",
-        boxSizing: "border-box",
-        position: "relative",
-      }}
-    >
-      {/* Watermark for draft status */}
-      {invoice.status.toLowerCase() === "draft" && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <span className="text-gray-300 text-6xl font-bold transform -rotate-45 opacity-30">
-            DRAFT
-          </span>
-        </div>
-      )}
+    <Document>
+      <Page size="A3" style={styles.page} ref={ref}>
+        {/* Watermark for draft status */}
+        {invoice.status.toLowerCase() === "draft" && (
+          <View style={styles.watermark}>
+            <Text>DRAFT</Text>
+          </View>
+        )}
 
-      {/* Header with company logo */}
-      <div className="flex justify-between items-start mb-8">
-        <div>
-          {invoice.from.logo && (
-            <img
-              src={invoice.from.logo}
-              alt="Company Logo"
-              className="h-16 mb-4"
-            />
-          )}
-          <div className="text-sm text-gray-500">
-            <p>{invoice.from.addressLine1}</p>
-            <p>{invoice.from.addressLine2}</p>
-            <p>
-              {invoice.from.city}, {invoice.from.state} {invoice.from.zip}
-            </p>
-            <p>{invoice.from.country}</p>
-          </div>
-        </div>
-
-        <div className="text-right">
-          <h1 className="text-3xl font-bold text-gray-800 mb-1">INVOICE</h1>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>
-              <span className="font-medium">Invoice #:</span>{" "}
-              {invoice.invoiceNumber}
-            </p>
-            <p>
-              <span className="font-medium">Date:</span>{" "}
-              {formatDate(invoice.date)}
-            </p>
-            <p>
-              <span className="font-medium">Due Date:</span>{" "}
-              {formatDate(invoice.dueDate)}
-            </p>
-            {invoice.poNumber && (
-              <p>
-                <span className="font-medium">PO #:</span> {invoice.poNumber}
-              </p>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            {invoice.from.logo ? (
+              <Image src={invoice.from.logo} style={styles.logo} />
+            ) : (
+              <Text style={styles.invoiceTitle}>INVOICE</Text>
             )}
-          </div>
-        </div>
-      </div>
+          </View>
 
-      {/* Client and payment info */}
-      <div className="flex justify-between mb-8">
-        <div className="border border-gray-200 p-4 rounded-md w-1/2">
-          <h3 className="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">
-            Bill To
-          </h3>
-          <p className="text-base font-semibold text-gray-800 mb-1">
-            {invoice.to.name}
-          </p>
-          <div className="text-sm text-gray-600">
-            {invoice.to.address && <p>{invoice.to.address}</p>}
-            {invoice.to.city && invoice.to.state && (
-              <p>
-                {invoice.to.city}, {invoice.to.state} {invoice.to.zip}
-              </p>
+          <View style={styles.invoiceDetails}>
+            <Text style={styles.invoiceNumber}>
+             {invoice.invoiceNumber}
+            </Text>
+            <Text>Issued: {formatDate(invoice.date)}</Text>
+            <Text>Due: {formatDate(invoice.dueDate)}</Text>
+            {invoice.poNumber && <Text>PO #: {invoice.poNumber}</Text>}
+            <View
+              style={[
+                styles.statusBadge,
+                { backgroundColor: getStatusColor(invoice.status) },
+              ]}
+            >
+              <Text>{invoice.status.toUpperCase()}</Text>
+            </View>
+          </View>
+        </View>
+        {/* Addresses */}
+        <View style={styles.addressBox}>
+          <View style={styles.addressCard}>
+            <Text style={styles.sectionTitle}>From</Text>
+            <Text style={[styles.addressText, { fontWeight: "semibold" }]}>
+              {invoice.from.name}
+            </Text>
+            <Text style={styles.addressText}>
+              {invoice.from.addressLine1}
+              {"\n"}
+              {invoice.from.email}
+              {"\n"}
+              {invoice.from.phone}
+            </Text>
+          </View>
+          <View style={styles.addressCard}>
+            <Text style={styles.sectionTitle}>Bill To</Text>
+            <Text style={[styles.addressText, { fontWeight: "semibold" }]}>
+              {invoice.to.name}
+            </Text>
+            <Text style={styles.addressText}>
+              {invoice.to.address}
+              {"\n"}
+              {invoice.to.email}
+              {"\n"}
+              {invoice.to.phone}
+            </Text>
+          </View>
+        </View>
+
+        {/* Payment Info */}
+        <View style={styles.paymentCard}>
+          <Text style={styles.sectionTitle}>Payment Details</Text>
+          <Text style={styles.addressText}>
+            <Text style={{ fontWeight: "semibold" }}>Method:</Text>{" "}
+            {invoice.paymentMethod}
+            {"\n"}
+            {invoice.paymentAccount && (
+              <Text>
+                <Text style={{ fontWeight: "semibold" }}>Account:</Text>{" "}
+                {invoice.paymentAccount}
+              </Text>
             )}
-            {invoice.to.country && <p>{invoice.to.country}</p>}
-            {invoice.to.email && <p>{invoice.to.email}</p>}
-            {invoice.to.phone && <p>{invoice.to.phone}</p>}
-            {invoice.to.vat && <p>VAT: {invoice.to.vat}</p>}
-          </div>
-        </div>
-
-        <div className="border border-gray-200 p-4 rounded-md w-1/3">
-          <h3 className="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">
-            Payment Details
-          </h3>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>
-              <span className="font-medium">Status:</span>{" "}
-              <span
-                className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                  invoice.status.toLowerCase() === "paid"
-                    ? "bg-green-100 text-green-800"
-                    : invoice.status.toLowerCase() === "pending"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {invoice.status}
-              </span>
-            </p>
-            <p>
-              <span className="font-medium">Method:</span>{" "}
-              {invoice.paymentMethod}
-            </p>
             {invoice.paymentInstructions && (
-              <p className="mt-2 text-xs">
-                <span className="font-medium">Instructions:</span>{" "}
+              <Text>
+                {"\n"}
+                <Text style={{ fontWeight: "semibold" }}>
+                  Instructions:
+                </Text>{" "}
                 {invoice.paymentInstructions}
-              </p>
+              </Text>
             )}
-          </div>
-        </div>
-      </div>
+          </Text>
+        </View>
 
-      {/* Items table */}
-      <div className="mb-6">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              <th className="py-3 px-4 border-b border-gray-200 text-left w-4/12">
-                Item
-              </th>
-              <th className="py-3 px-4 border-b border-gray-200 text-right w-1/12">
-                Qty
-              </th>
-              <th className="py-3 px-4 border-b border-gray-200 text-right w-2/12">
-                Unit Price
-              </th>
-              <th className="py-3 px-4 border-b border-gray-200 text-right w-2/12">
-                Tax
-              </th>
-              <th className="py-3 px-4 border-b border-gray-200 text-right w-3/12">
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoice.items.map((item, index) => (
-              <tr
-                key={item.id}
-                className={`${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } text-sm`}
-              >
-                <td className="py-3 px-4 border-b border-gray-100">
-                  <div className="font-medium text-gray-800">
-                    {item.description}
-                  </div>
-                  {item.details && (
-                    <div className="text-xs text-gray-500 mt-1">
-                      {item.details}
-                    </div>
-                  )}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-100 text-right">
-                  {item.quantity}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-100 text-right">
-                  {invoice.currency || "$"}
-                  {item.price.toFixed(2)}
-                </td>
-                <td className="py-3 px-4 border-b border-gray-100 text-right">
-                  {item.tax}%
-                </td>
-                <td className="py-3 px-4 border-b border-gray-100 text-right font-medium">
-                  {invoice.currency || "$"}
-                  {calculateItemTotal(item).toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        {/* Items Table */}
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={[styles.colDescription, { fontWeight: "semibold" }]}>
+              Item
+            </Text>
+            <Text style={[styles.colQuantity, { fontWeight: "semibold" }]}>
+              Qty
+            </Text>
+            <Text style={[styles.colPrice, { fontWeight: "semibold" }]}>
+              Unit Price
+            </Text>
+            <Text style={[styles.colTax, { fontWeight: "semibold" }]}>Tax</Text>
+            <Text style={[styles.colAmount, { fontWeight: "semibold" }]}>
+              Amount
+            </Text>
+          </View>
 
-      {/* Totals */}
-      <div className="flex justify-end">
-        <div className="w-full md:w-1/2 lg:w-1/3">
-          <div className="border border-gray-200 rounded-md">
-            <div className="p-4 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider">
-                Summary
-              </h3>
-            </div>
-            <div className="p-4 space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Subtotal:</span>
-                <span className="font-medium">
-                  {invoice.currency || "$"}
-                  {calculateSubtotal().toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Tax ({invoice.taxRate}%):</span>
-                <span className="font-medium">
-                  {invoice.currency || "$"}
-                  {calculateTax().toFixed(2)}
-                </span>
-              </div>
+          {invoice.items.map((item, index) => (
+            <View key={index} style={styles.tableRow}>
+              <View style={styles.colDescription}>
+                <Text style={styles.itemDescription}>{item.description}</Text>
+                {item.details && (
+                  <Text style={styles.itemDetails}>{item.details}</Text>
+                )}
+              </View>
+              <Text style={styles.colQuantity}>{item.quantity}</Text>
+              <Text style={styles.colPrice}>
+                <Text style={styles.currencySymbol}>
+                  {invoice.currencySymbol || "$"}
+                </Text>
+                {item.price.toFixed(2)}
+              </Text>
+              <Text style={styles.colTax}>{item.tax}%</Text>
+              <Text style={styles.colAmount}>
+                <Text style={styles.currencySymbol}>
+                  {invoice.currencySymbol || "$"}
+                </Text>
+                {calculateItemTotal(item).toFixed(2)}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Totals */}
+        <View style={styles.totalsContainer}>
+          <View style={styles.totalsBox}>
+            <View style={styles.totalsHeader}>
+              <Text style={styles.sectionTitle}>Summary</Text>
+            </View>
+            <View>
+              <View style={styles.totalRow}>
+                <Text>Subtotal:</Text>
+                <Text style={styles.amount}>
+                  {formatCurrency(calculateSubtotal())}
+                </Text>
+              </View>
+              <View style={styles.totalRow}>
+                <Text>Tax:</Text>
+                <Text style={styles.amount}>
+                  {formatCurrency(calculateTax())}
+                </Text>
+              </View>
               {invoice.discount > 0 && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
-                    Discount ({invoice.discount}%):
-                  </span>
-                  <span className="font-medium text-red-600">
-                    -{invoice.currency || "$"}
-                    {calculateDiscount().toFixed(2)}
-                  </span>
-                </div>
+                <View style={styles.totalRow}>
+                  <Text>Discount ({invoice.discount}%):</Text>
+                  <Text style={styles.amount}>
+                    -{formatCurrency(calculateDiscount())}
+                  </Text>
+                </View>
               )}
-              <div className="pt-2 mt-2 border-t border-gray-200">
-                <div className="flex justify-between font-bold">
-                  <span>Total Due:</span>
-                  <span>
-                    {invoice.currency || "$"}
-                    {calculateTotal().toFixed(2)}
-                  </span>
-                </div>
-              </div>
+              <View style={[styles.totalRow, styles.grandTotal]}>
+                <Text style={{ fontWeight: "semibold" }}>Total Due:</Text>
+                <Text style={[styles.amount, { fontWeight: "bold" }]}>
+                  {formatCurrency(calculateTotal())}
+                </Text>
+              </View>
               {invoice.amountPaid > 0 && (
-                <div className="flex justify-between text-sm pt-2">
-                  <span className="text-gray-600">Amount Paid:</span>
-                  <span className="font-medium text-green-600">
-                    {invoice.currency || "$"}
-                    {invoice.amountPaid.toFixed(2)}
-                  </span>
-                </div>
+                <>
+                  <View style={styles.totalRow}>
+                    <Text>Amount Paid:</Text>
+                    <Text style={styles.amount}>
+                      {formatCurrency(invoice.amountPaid)}
+                    </Text>
+                  </View>
+                  <View style={[styles.totalRow, styles.grandTotal]}>
+                    <Text style={{ fontWeight: "semibold" }}>Balance Due:</Text>
+                    <Text style={[styles.amount, { fontWeight: "bold" }]}>
+                      {formatCurrency(calculateTotal() - invoice.amountPaid)}
+                    </Text>
+                  </View>
+                </>
               )}
-              {invoice.amountPaid > 0 && (
-                <div className="flex justify-between font-bold pt-2 border-t border-gray-200">
-                  <span>Balance Due:</span>
-                  <span>
-                    {invoice.currency || "$"}
-                    {(calculateTotal() - invoice.amountPaid).toFixed(2)}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+            </View>
+          </View>
+        </View>
+        {/* Notes and Terms */}
+        {(invoice.notes || invoice.terms) && (
+          <View style={styles.notesContainer}>
+            {invoice.notes && (
+              <View style={styles.notesBox}>
+                <Text style={styles.sectionTitle}>Notes</Text>
+                <Text style={[styles.addressText, { marginTop: 8 }]}>
+                  {invoice.notes}
+                </Text>
+              </View>
+            )}
+            {invoice.terms && (
+              <View style={styles.notesBox}>
+                <Text style={styles.sectionTitle}>Terms & Conditions</Text>
+                <Text style={[styles.addressText, { marginTop: 8 }]}>
+                  {invoice.terms}
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
 
-      {/* Notes and terms */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {invoice.notes && (
-          <div>
-            <h3 className="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">
-              Notes
-            </h3>
-            <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
-              {invoice.notes}
-            </div>
-          </div>
-        )}
-        {invoice.terms && (
-          <div>
-            <h3 className="text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">
-              Terms & Conditions
-            </h3>
-            <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
-              {invoice.terms}
-            </div>
-          </div>
-        )}
-      </div>
-      {/* Footer */}
-      <div className="mt-12 pt-6 border-t border-gray-200 text-center text-xs text-gray-500">
-        <p className="mb-1">
-          {invoice.from.name} • {invoice.from.phone} • {invoice.from.email}
-        </p>
-        <p>
-          {invoice.footerNote ||
-            "Thank you for your business. Please make payments by the due date."}
-        </p>
-      </div>
-    </div>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text>
+            {invoice.from.name} • {invoice.from.phone} • {invoice.from.email}
+          </Text>
+          <Text style={{ marginTop: 4 }}>
+            {invoice.footerNote ||
+              "Thank you for your business! Please make payment by the due date."}
+          </Text>
+          {invoice.from.website && (
+            <Text style={{ marginTop: 4 }}>{invoice.from.website}</Text>
+          )}
+        </View>
+      </Page>
+    </Document>
   );
 });
 
